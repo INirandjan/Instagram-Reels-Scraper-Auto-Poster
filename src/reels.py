@@ -5,7 +5,7 @@ import config
 import time
 import auth
 import helpers as Helper
-from helpers import print
+# from helpers import print
 
 
 #Function to fetch reel from given account
@@ -17,6 +17,7 @@ def get_reels(account,api):
 
 #Function to get file name from URL
 def get_file_name_from_url(url):
+    url = str(url)  # 👈 Dit is de fix
     path = url.split('/')
     filename = path[-1]
     return filename.split('?')[0]
@@ -36,7 +37,7 @@ def main(api):
         reels_by_account = get_reels(account,api)
 
         for reel in reels_by_account:
-            #print(f"Reel ID: {reel.id}, Caption: {reel.caption_text}, Url : {reel.video_url}")
+            print(f"Reel ID: {reel.id}, Caption: {reel.caption_text}, Url : {reel.video_url}")
             if reel.video_url != None :
                 try :
                     print('------------------------------------------------------------------------------------')
@@ -70,7 +71,9 @@ def main(api):
                         #print('Insert Reel Record : ' + json.dumps(reel, cls=ReelEncoder) )
                         print('<---------Database Insert End--------->')
                     print('------------------------------------------------------------------------------------')
-                except :
+                except Exception as e:
+                    print(f"[red]Fout bij verwerken van reel met code {getattr(reel, 'code', 'onbekend')}: {e}[/red]")
+                    print("it exist..")
                     # Do Nothing
                     pass
                 
